@@ -5,17 +5,17 @@ import { Link } from "react-router-dom";
 export default class ItemsList extends Component {
   constructor(props) {
     super(props);
-    this.onChangeSearchItem = this.onChangeSearchItem.bind(this);
+    this.onChangeSearchItemcode = this.onChangeSearchItemcode.bind(this);
     this.retrieveItems = this.retrieveItems.bind(this);
     this.refreshList = this.refreshList.bind(this);
-    this.removeAllItems = this.removeAllItems.bind(this);
-    this.searchItem = this.searchItem.bind(this);
+    this.setActiveItem = this.setActiveItem.bind(this);
+    this.searchItemcode = this.searchItemcode.bind(this);
 
     this.state = {
-      Items: [],
+      items: [],
       currentItem: null,
       currentIndex: -1,
-      searchItem: ""
+      searchTitle: ""
     };
   }
 
@@ -23,11 +23,11 @@ export default class ItemsList extends Component {
     this.retrieveItems();
   }
 
-  onChangeSearchItem(e) {
-    const searchItem = e.target.value;
+  onChangeSearchItemcode(e) {
+    const searchItemcode = e.target.value;
 
     this.setState({
-      searchItem: searchItem
+      searchItemcode: searchItemcode
     });
   }
 
@@ -35,7 +35,7 @@ export default class ItemsList extends Component {
     ItemDataService.getAll()
       .then(response => {
         this.setState({
-          Items: response.data
+          items: response.data
         });
         console.log(response.data);
       })
@@ -52,29 +52,18 @@ export default class ItemsList extends Component {
     });
   }
 
-  setActiveItem(itemcode, index) {
+  setActiveItem(item, index) {
     this.setState({
-      currentItem: itemcode,
+      currentItem: item,
       currentIndex: index
     });
   }
 
-  removeAllItems() {
-    ItemDataService.deleteAll()
-      .then(response => {
-        console.log(response.data);
-        this.refreshList();
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-
-  searchItem() {
-    ItemDataService.findByItemcode(this.state.searchItem)
+  searchItemcode() {
+    ItemDataService.findByItemcode(this.state.searchItemcode)
       .then(response => {
         this.setState({
-          Items: response.data
+          items: response.data
         });
         console.log(response.data);
       })
@@ -82,94 +71,83 @@ export default class ItemsList extends Component {
         console.log(e);
       });
   }
+
   render() {
-    const { searchItem, Items, currentItem, currentIndex } = this.state;
+    const { currentItem } = this.state;
 
     return (
-      <div className="list row">
-        <div className="col-md-8">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by Item"
-              value={searchItem}
-              onChange={this.onChangeSearchItem}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={this.searchItem}
-              >
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <h4>Items List</h4>
-
-          <ul className="list-group">
-            {Items &&
-              Items.map((itemcode, index) => (
-                <li
-                  className={
-                    "list-group-item " +
-                    (index === currentIndex ? "active" : "")
-                  }
-                  onClick={() => this.setActiveItem(itemcode, index)}
-                  key={index}
-                >
-                  {Item.itemcode}
-                </li>
-              ))}
-          </ul>
-
-          <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAllItems}
-          >
-            Remove All
-          </button>
-        </div>
-        <div className="col-md-6">
-          {currentItem ? (
-            <div>
-              <h4>Item</h4>
-              <div>
-                <label>
-                  <strong>Item:</strong>
-                </label>{" "}
-                {currentItem.itemcode}
+      <div>
+        {currentItem ? (
+          <div className="edit-form">
+            <h4>Item</h4>
+            <form>
+              <div className="form-group">
+                <label htmlFor="itemcode">Item code</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="itemcode"
+                  value={currentItem.itemcode}
+                  onChange={this.onChangeItemcode}
+                />
               </div>
-              <div>
-                <label>
-                  <strong>Description:</strong>
-                </label>{" "}
-                {currentItem.description}
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="description"
+                  value={currentItem.description}
+                  onChange={this.onChangeDescription}
+                />
               </div>
-              <div>
+
+              <div className="form-group">
                 <label>
                   <strong>Status:</strong>
-                </label>{" "}
+                </label>
                 {currentItem.state ? "ACTIVE" : "DISCONTINUED"}
               </div>
+            </form>
 
-              <Link
-                to={"/Item/" + currentItem.id}
-                className="badge badge-warning"
+            {currentItem.state ? (
+              <button
+                className="badge badge-primary mr-2"
+                onClick={() => this.updateState("DISCONTINUED")}
               >
-                Edit
-              </Link>
-            </div>
-          ) : (
-            <div>
-              <br />
-              <p>Please click on a Item...</p>
-            </div>
-          )}
-        </div>
+                UnPublish
+              </button>
+            ) : (
+              <button
+                className="badge badge-primary mr-2"
+                onClick={() => this.updateState("ACTIVE")}
+              >
+                Publish
+              </button>
+            )}
+
+            <button
+              className="badge badge-danger mr-2"
+              onClick={this.deleteItem}
+            >
+              Delete
+            </button>
+
+            <button
+              type="submit"
+              className="badge badge-success"
+              onClick={this.updateItem}
+            >
+              Update
+            </button>
+            <p>{this.state.message}</p>
+          </div>
+        ) : (
+          <div>
+            <br />
+            <p>Please click on an Item...</p>
+          </div>
+        )}
       </div>
     );
   }

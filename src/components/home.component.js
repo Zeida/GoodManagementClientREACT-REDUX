@@ -1,39 +1,20 @@
 import React, { Component } from "react";
-
+import axios from 'axios';
 import UserService from "../services/user.service";
 
 export default class Home extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      content: ""
-    };
-  }
 
-  componentDidMount() {
-    UserService.getPublicContent().then(
-      response => {
-        this.setState({
-          content: response.data
-        });
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString()
-        });
-      }
-    );
+  async componentDidMount() {
   }
 
   render() {
     return (
       <div className="container">
         <header className="jumbotron">
-          <h3>{this.state.content}</h3>
+          <h1 className="display-4" className="mb-0 d-flex justify-content-center">Welcome!</h1>
+          <h2 className="mb-0 d-flex justify-content-center">You're in Bitboxer 2</h2>
+          <p className="text-center" >This is a goods management application.</p>
         </header>
       </div>
     );

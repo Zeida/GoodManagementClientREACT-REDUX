@@ -5,7 +5,7 @@ class ItemDataService {
     return http.get("/items");
   }
 
-  get(id) {
+  get(itemcode) {
     return http.get(`/item/${itemcode}`);
   }
 
@@ -19,6 +19,10 @@ class ItemDataService {
 
   delete(id) {
     return http.delete(`/item/${itemcode}/delete`);
+  }
+  //es igual que get
+  findByItemcode(itemcode) {
+    return http.get(`/item/${itemcode}`);
   }
 }
 

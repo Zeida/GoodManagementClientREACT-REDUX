@@ -18,9 +18,6 @@ import { clearMessage } from "./actions/message";
 
 import { history } from './helpers/history';
 
-import AddItem from "./components/add-item.component";
-import Item from "./components/item.component";
-import ItemsList from "./components/item-list.component";
 
 class App extends Component {
   constructor(props) {
@@ -44,8 +41,8 @@ class App extends Component {
     if (user) {
       this.setState({
         currentUser: user,
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+        //showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
+        //showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
   }
@@ -55,7 +52,7 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
+    const { currentUser } = this.state;
 
     return (
       <Router history={history}>
@@ -77,30 +74,14 @@ class App extends Component {
             </li>
             <li className="nav-item">
               <Link to={"/create"} className="nav-link">
-                Create
+                CreateItems
               </Link>
             </li>
-
-              {showModeratorBoard && (
-                <li className="nav-item">
-                  <Link to={"/mod"} className="nav-link">
-                    Moderator Board
-                  </Link>
-                </li>
-              )}
-
-              {showAdminBoard && (
-                <li className="nav-item">
-                  <Link to={"/admin"} className="nav-link">
-                    Admin Board
-                  </Link>
-                </li>
-              )}
 
               {currentUser && (
                 <li className="nav-item">
                   <Link to={"/user"} className="nav-link">
-                    User
+                    Users
                   </Link>
                 </li>
               )}
@@ -139,9 +120,6 @@ class App extends Component {
           <div className="container mt-3">
             <Switch>
               <Route exact path={["/", "/home"]} component={Home} />
-              <Route exact path={["/", "/items"]} component={ItemsList} />
-              <Route exact path="/create" component={AddItem} />
-              <Route path="/item/:itemcode" component={Item} />
               <Route exact path="/authenticate" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
