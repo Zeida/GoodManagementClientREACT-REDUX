@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/api/";
 
 class AuthService {
-  login(username, password) {
+  async login(username, password) {
     return axios
       .post(API_URL + "authenticate", { username, password })
       .then((response) => {
@@ -19,10 +19,11 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  register(username, password) {
+  register(username, email, password) {
     let data = JSON.stringify({
-      password,
-      username
+      username, 
+      email, 
+      password 
   })
     return axios.post(API_URL + "register", data, {
       headers: {

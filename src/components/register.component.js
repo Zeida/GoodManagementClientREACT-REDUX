@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import { isEmail } from "validator";
 
 import { connect } from "react-redux";
 import { register } from "../actions/auth";
@@ -16,6 +17,15 @@ const required = (value) => {
   }
 };
 
+const email = (value) => {
+  if (!isEmail(value)) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        This is not a valid email.
+      </div>
+    );
+  }
+};
 
 const vusername = (value) => {
   if (value.length < 3 || value.length > 20) {
@@ -42,10 +52,12 @@ class Register extends Component {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
       username: "",
+      email: "",
       password: "",
       successful: false,
     };
@@ -54,6 +66,12 @@ class Register extends Component {
   onChangeUsername(e) {
     this.setState({
       username: e.target.value,
+    });
+  }
+
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value,
     });
   }
 
@@ -75,7 +93,7 @@ class Register extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       this.props
         .dispatch(
-          register(this.state.username, this.state.password)
+          register(this.state.username, this.state.email, this.state.password)
         )
         .then(() => {
           this.setState({
@@ -119,6 +137,18 @@ class Register extends Component {
                     value={this.state.username}
                     onChange={this.onChangeUsername}
                     validations={[required, vusername]}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="email"
+                    value={this.state.email}
+                    onChange={this.onChangeEmail}
+                    validations={[required, email]}
                   />
                 </div>
 

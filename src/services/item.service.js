@@ -13,11 +13,11 @@ class ItemDataService {
     return http.post("/item/create", data);
   }
 
-  update(id, data) {
+  update(itemcode, data) {
     return http.put(`/item/${itemcode}/update`, data);
   }
 
-  delete(id) {
+  delete(itemcode) {
     return http.delete(`/item/${itemcode}/delete`);
   }
   //es igual que get

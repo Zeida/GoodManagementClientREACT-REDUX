@@ -12,6 +12,7 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
+import ItemList from "./components/item-list.component";
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
@@ -67,16 +68,20 @@ class App extends Component {
                 Home
               </Link>
             </li>
+            {currentUser && (
               <li className="nav-item">
               <Link to={"/items"} className="nav-link">
                 Items
               </Link>
             </li>
+            )}
+            {currentUser && (
             <li className="nav-item">
               <Link to={"/create"} className="nav-link">
                 CreateItems
               </Link>
             </li>
+            )}
 
               {currentUser && (
                 <li className="nav-item">
@@ -121,8 +126,9 @@ class App extends Component {
             <Switch>
               <Route exact path={["/", "/home"]} component={Home} />
               <Route exact path="/authenticate" component={Login} />
+              <Route exact path="/items" component={ItemList} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/user" component={Profile} />
               <Route path="/user" component={BoardUser} />
               <Route path="/mod" component={BoardModerator} />
               <Route path="/admin" component={BoardAdmin} />
