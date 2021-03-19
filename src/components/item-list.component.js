@@ -15,7 +15,7 @@ export default class ItemsList extends Component {
       items: [],
       currentItem: null,
       currentIndex: -1,
-      searchTitle: ""
+      searchItemcode: ""
     };
   }
 

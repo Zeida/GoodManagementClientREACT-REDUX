@@ -1,29 +1,36 @@
-import http from "../http-common";
+import axios from "axios";
+import authHeader from "./auth-header";
+
+const API_URL = "http://localhost:8080/api/";
 
 class ItemDataService {
+
   getAll() {
-    return http.get("/items");
+    return axios.get(API_URL + "items", { headers: authHeader() });
   }
 
   get(itemcode) {
-    return http.get(`/item/${itemcode}`);
+    return axios.get(API_URL + "/item/"+{itemcode}, { headers: authHeader() });
   }
 
   create(data) {
-    return http.post("/item/create", data);
+    return axios.post(API_URL + "/item/create",data, { headers: authHeader() });
   }
 
   update(itemcode, data) {
-    return http.put(`/item/${itemcode}/update`, data);
+    return axios.put(API_URL + "/item/"+{itemcode}+"/update", { headers: authHeader() });
   }
 
   delete(itemcode) {
-    return http.delete(`/item/${itemcode}/delete`);
+    return axios.delete(API_URL + "/item/"+{itemcode}+"/delete", { headers: authHeader() });
   }
   //es igual que get
   findByItemcode(itemcode) {
-    return http.get(`/item/${itemcode}`);
+    return axios.get(API_URL + "/item/"+{itemcode}, { headers: authHeader() });
   }
 }
+
+
+
 
 export default new ItemDataService();
