@@ -24,10 +24,6 @@ class ItemDataService {
   delete(itemcode) {
     return axios.delete(API_URL + "/item/"+{itemcode}+"/delete", { headers: authHeader() });
   }
-  //es igual que get
-  findByItemcode(itemcode) {
-    return axios.get(API_URL + "/item/"+{itemcode}, { headers: authHeader() });
-  }
 }
 
 
